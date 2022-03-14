@@ -51,7 +51,6 @@
 <link rel="stylesheet" href="/js/prism/prism.css">
 <link rel="stylesheet" type="text/css" href="./live2dDemo/Samples/TypeScript/Demo/live2d/assets/waifu.css"/>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/@waline/client"></script>
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
@@ -181,6 +180,10 @@
 
         </div>
       </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
   </aside>
   <div class="sidebar-dimmer"></div>
@@ -189,10 +192,6 @@
     </header>
 
     
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
   <div class="reading-progress-bar"></div>
 
 <noscript>
@@ -404,13 +403,6 @@ darkmode.showWidget();
     initModel(modulesPath,modelNames,waifuTipsUrl);
 </script>
 
-<div id="waline"></div>
-<script>
-    Waline({
-      el: '#waline',
-      serverURL: 'https://blog-api-isotr0py.vercel.app',
-    });
-</script>
 
 </body>
 </html>
