@@ -46,7 +46,7 @@
 
 <link rel="dns-prefetch" href="https://blog-api-isotr0py.vercel.app"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" href="/js/prism/prism.css">
-<link rel="stylesheet" type="text/css" href="./live2dDemo/Samples/TypeScript/Demo/live2d/assets/waifu.css"/>
+<link rel="stylesheet" type="text/css" href="/live2d/live2d/assets/waifu.css"/>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/@waline/client"></script>
   <noscript>
@@ -506,16 +506,16 @@ darkmode.showWidget();
     </div>
 </div>
   <!-- Live2DCubismCore script -->
-<script src="./live2dDemo/Core/live2dcubismcore.js"></script>
+<script src="./live2d/js/live2dcubismcore.js"></script>
   <!-- Build script -->
-  <script src = "./live2dDemo/Samples/TypeScript/Demo/dist/meidou_live2d.js"></script>
-  <script src="./live2dDemo/Samples/TypeScript/Demo/live2d/assets/waifu-tips.js"></script>
+  <script src = "/live2d/js/meidou_live2d.js"></script>
+  <script src="/live2d/live2d/assets/waifu-tips.js"></script>
   <script type="text/javascript">
     //必选参数
-    let modulesPath = "./live2dDemo/Samples/TypeScript/Demo/live2d/models/"
+    let modulesPath = "/live2d/live2d/models/"
     let modelNames = ['heisha','yu']  //注意，这里的名字是存放你模型文件的主目录的名字，目录中的moc3.json文件的名字一定要与目录同名
     //可选参数
-    let waifuTipsUrl = "./live2dDemo/Samples/TypeScript/Demo/live2d/assets/waifu-tips.json"
+    let waifuTipsUrl = "/live2d/live2d/assets/waifu-tips.json"
     initModel(modulesPath,modelNames,waifuTipsUrl);
 </script>
 
