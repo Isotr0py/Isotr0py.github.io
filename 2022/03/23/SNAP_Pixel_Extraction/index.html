@@ -20,17 +20,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="SNAP介绍用过欧空局Sentinel系列卫星影像的，应该都接触过SNAP这个开源遥感处理平台。做水色遥感的更多会接触到其衍生的另一套开源遥感软件——SeaDas。   关于SNAP的特点和安装，可以参考大佬写好的文章：SNAP与Snappy介绍及安装。进行下一步前请先确定SNAP和snappy已经配置好。 像元值提取在对遥感影像进行一系列的辐射定标、大气校正的预处理步骤后，我们可能需要提取一些特">
-<meta property="og:type" content="article">
+    <meta property="og:type" content="article">
 <meta property="og:title" content="【SNAP】Snappy实现对遥感影像特定坐标像元值的批量提取">
 <meta property="og:url" content="http://example.com/2022/03/23/SNAP_Pixel_Extraction/index.html">
 <meta property="og:site_name" content="阿纳海姆电子">
-<meta property="og:description" content="SNAP介绍用过欧空局Sentinel系列卫星影像的，应该都接触过SNAP这个开源遥感处理平台。做水色遥感的更多会接触到其衍生的另一套开源遥感软件——SeaDas。   关于SNAP的特点和安装，可以参考大佬写好的文章：SNAP与Snappy介绍及安装。进行下一步前请先确定SNAP和snappy已经配置好。 像元值提取在对遥感影像进行一系列的辐射定标、大气校正的预处理步骤后，我们可能需要提取一些特">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2022/03/23/SNAP_Pixel_Extraction/io.png">
 <meta property="og:image" content="http://example.com/2022/03/23/SNAP_Pixel_Extraction/para.png">
 <meta property="article:published_time" content="2022-03-23T11:57:08.000Z">
-<meta property="article:modified_time" content="2022-03-23T14:56:03.346Z">
+<meta property="article:modified_time" content="2022-03-23T16:05:25.735Z">
 <meta property="article:author" content="东海铁奥">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2022/03/23/SNAP_Pixel_Extraction/io.png">
@@ -246,9 +244,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-03-23 19:57:08 / 修改时间：22:56:03" itemprop="dateCreated datePublished" datetime="2022-03-23T19:57:08+08:00">2022-03-23</time>
+      <time title="创建时间：2022-03-23 19:57:08" itemprop="dateCreated datePublished" datetime="2022-03-23T19:57:08+08:00">2022-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-03-24 00:05:25" itemprop="dateModified" datetime="2022-03-24T00:05:25+08:00">2022-03-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -293,14 +297,14 @@
 <li>Output Directory为像元值表格文件的输出路径</li>
 <li>Prefix为最后提取出的ASCII表的文件名前缀。  </li>
 </ul>
-<p><img src="/2022/03/23/SNAP_Pixel_Extraction/io.png" alt="io"></p>
+<p><img src="io.png" alt="io"></p>
 <p>Parameters一栏对应坐标提取过程的设置,此处仅对常用的几项进行说明：</p>
 <ul>
 <li>Coordinates会显示我们导入的坐标信息，其旁边的+号可以导入我们提前在csv文件写好的坐标数据。需要注意的是，csv表格的列名应与Coordinates所显示的列名一致。</li>
 <li>Windows size是以提取的像元为中心的窗口大小，例如3x3大小的窗口即会选取对应坐标的像元及其周围相邻的8个像元值进行提取与计算。</li>
 <li>Aggregation meathod对应窗口内像元值的处理方法，一般选择mean（取平均值）或者median（取中位数）。<br>完成参数设置后，后点击extract即可完成一幅影像的像元值提取。  </li>
 </ul>
-<p><img src="/2022/03/23/SNAP_Pixel_Extraction/para.png" alt="para"></p>
+<p><img src="para.png" alt="para"></p>
 <h2 id="SNAPPY批量提取像元值"><a href="#SNAPPY批量提取像元值" class="headerlink" title="SNAPPY批量提取像元值"></a>SNAPPY批量提取像元值</h2><p>对于长时序影像序列，我们往往需要提取少则十几幅多则数百幅影像的像元值提取，这一过程在桌面端重复操作必然是容易出现失误且无比坐牢的。因此，我们可以利用SNAP提供的Python API——Snappy进行批处理。<br>在设置好参数后，选择file一栏，display parameters将以xml格式显示出我们已经设置好的参数：</p>
 <pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>parameters</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sourceProductPaths</span><span class="token punctuation">></span></span>G:\landsat8_insitu_append\Acolite_HK\LC08_L1TP_121_20170712_20170726_01_T1\L8_OLI_2017_07_12_02_45_44_merged_L2W.nc<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sourceProductPaths</span><span class="token punctuation">></span></span>
@@ -408,7 +412,6 @@
     extract_pixel<span class="token punctuation">(</span>ifile<span class="token punctuation">,</span>odir<span class="token punctuation">,</span>coord_data<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://forum.step.esa.int/t/extracting-pixel-values-sentinel-2a-l2a-with-snap-or-snappy/29878/3">Extracting pixel values Sentinel-2a L2A with Snap or Snappy</a></p>
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>本来这个博客是跟风搭的，打算记录一下自己写的一些有趣的代码和一些码代码的经验。 但是翻了一下自己写的代码屎山，有趣的代码就没几个能发出来的<del>（发了怕是要被请去喝茶）</del>，那还是先放搬砖用的代码算了。</p>
-
     </div>
 
     

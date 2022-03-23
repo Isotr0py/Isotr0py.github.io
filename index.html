@@ -239,9 +239,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-03-23 19:57:08 / 修改时间：22:56:03" itemprop="dateCreated datePublished" datetime="2022-03-23T19:57:08+08:00">2022-03-23</time>
+      <time title="创建时间：2022-03-23 19:57:08" itemprop="dateCreated datePublished" datetime="2022-03-23T19:57:08+08:00">2022-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-03-24 00:05:25" itemprop="dateModified" datetime="2022-03-24T00:05:25+08:00">2022-03-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -277,131 +283,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="SNAP介绍"><a href="#SNAP介绍" class="headerlink" title="SNAP介绍"></a>SNAP介绍</h1><p>用过欧空局Sentinel系列卫星影像的，应该都接触过SNAP这个开源遥感处理平台。做水色遥感的更多会接触到其衍生的另一套开源遥感软件——SeaDas。  </p>
-<p>关于SNAP的特点和安装，可以参考大佬写好的文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/lidahuilidahui/article/details/99679554">SNAP与Snappy介绍及安装</a>。进行下一步前请先确定SNAP和snappy已经配置好。</p>
-<h1 id="像元值提取"><a href="#像元值提取" class="headerlink" title="像元值提取"></a>像元值提取</h1><p>在对遥感影像进行一系列的辐射定标、大气校正的预处理步骤后，我们可能需要提取一些特定坐标的数据进行处理与研究。在遥感影像中，地理信息数据是以栅格形式保存在文件中的，其地理坐标系所记录的是每一个像元中心的经纬度。因此，提取特定坐标的数据实际上是提取其所在像元的数据。  </p>
-<h2 id="SNAP桌面端的操作方法"><a href="#SNAP桌面端的操作方法" class="headerlink" title="SNAP桌面端的操作方法"></a>SNAP桌面端的操作方法</h2><p>在桌面端的SNAP中，选择工具栏的Raster→Export→Extract Pixel Values，即可打开像元值提取工具Pixel Extraction，在这里我们完成参数设置即可实现像元值提取。<br>Input/Output一栏对应I/O设置：</p>
-<ul>
-<li>Source Path中可添加我们需要提取值的影像文件</li>
-<li>Output Directory为像元值表格文件的输出路径</li>
-<li>Prefix为最后提取出的ASCII表的文件名前缀。  </li>
-</ul>
-<p><img src="/2022/03/23/SNAP_Pixel_Extraction/io.png" alt="io"></p>
-<p>Parameters一栏对应坐标提取过程的设置,此处仅对常用的几项进行说明：</p>
-<ul>
-<li>Coordinates会显示我们导入的坐标信息，其旁边的+号可以导入我们提前在csv文件写好的坐标数据。需要注意的是，csv表格的列名应与Coordinates所显示的列名一致。</li>
-<li>Windows size是以提取的像元为中心的窗口大小，例如3x3大小的窗口即会选取对应坐标的像元及其周围相邻的8个像元值进行提取与计算。</li>
-<li>Aggregation meathod对应窗口内像元值的处理方法，一般选择mean（取平均值）或者median（取中位数）。<br>完成参数设置后，后点击extract即可完成一幅影像的像元值提取。  </li>
-</ul>
-<p><img src="/2022/03/23/SNAP_Pixel_Extraction/para.png" alt="para"></p>
-<h2 id="SNAPPY批量提取像元值"><a href="#SNAPPY批量提取像元值" class="headerlink" title="SNAPPY批量提取像元值"></a>SNAPPY批量提取像元值</h2><p>对于长时序影像序列，我们往往需要提取少则十几幅多则数百幅影像的像元值提取，这一过程在桌面端重复操作必然是容易出现失误且无比坐牢的。因此，我们可以利用SNAP提供的Python API——Snappy进行批处理。<br>在设置好参数后，选择file一栏，display parameters将以xml格式显示出我们已经设置好的参数：</p>
-<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>parameters</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sourceProductPaths</span><span class="token punctuation">></span></span>G:\landsat8_insitu_append\Acolite_HK\LC08_L1TP_121_20170712_20170726_01_T1\L8_OLI_2017_07_12_02_45_44_merged_L2W.nc<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sourceProductPaths</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>exportBands</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>exportBands</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>exportTiePoints</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>exportTiePoints</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>exportMasks</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>exportMasks</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>coordinates</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>coordinate</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">></span></span>24<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>latitude</span><span class="token punctuation">></span></span>22.2915<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>latitude</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>longitude</span><span class="token punctuation">></span></span>114.26095<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>longitude</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>originalValues</span><span class="token punctuation">/></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">></span></span>0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>coordinate</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>coordinate</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">></span></span>25<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>latitude</span><span class="token punctuation">></span></span>22.28121667<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>latitude</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>longitude</span><span class="token punctuation">></span></span>114.2563<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>longitude</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>originalValues</span><span class="token punctuation">/></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">></span></span>0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>coordinate</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>coordinates</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>timeDifference</span><span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>windowSize</span><span class="token punctuation">></span></span>3<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>windowSize</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>outputDir</span><span class="token punctuation">></span></span>D:\ProgramData\RS_scripts<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>outputDir</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>outputFilePrefix</span><span class="token punctuation">></span></span>test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>outputFilePrefix</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>exportExpressionResult</span><span class="token punctuation">></span></span>true<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>exportExpressionResult</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>aggregatorStrategyType</span><span class="token punctuation">></span></span>mean<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>aggregatorStrategyType</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>exportSubScenes</span><span class="token punctuation">></span></span>false<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>exportSubScenes</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>subSceneBorderSize</span><span class="token punctuation">></span></span>0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>subSceneBorderSize</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>exportKmz</span><span class="token punctuation">></span></span>false<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>exportKmz</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>extractTimeFromFilename</span><span class="token punctuation">></span></span>false<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>extractTimeFromFilename</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dateInterpretationPattern</span><span class="token punctuation">></span></span>yyyyMMdd<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dateInterpretationPattern</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>filenameInterpretationPattern</span><span class="token punctuation">></span></span>*$&#123;startDate&#125;*$&#123;endDate&#125;*<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>filenameInterpretationPattern</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>includeOriginalInput</span><span class="token punctuation">></span></span>false<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>includeOriginalInput</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>parameters</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>可见我们输入的各项参数都是以xml格式存储的，其中每一个坐标是以Coordinate的子元素格式被保存于一个名为Coordinates的元素中，Coordinate又分为name, latitude, longitude等子属性。鉴于SNAP是基于Java开发的，因此Coordinates最终应返回一个array，Coordinate即为此array中的子元素（也是array）。<br>因此，整个像元提取过程在snappy中可以定义为一个函数：  </p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
-<span class="token keyword">import</span> snappy
-<span class="token keyword">import</span> jpy
-
-<span class="token keyword">def</span> <span class="token function">extract_pixel</span><span class="token punctuation">(</span>ifile<span class="token punctuation">:</span><span class="token builtin">str</span><span class="token punctuation">,</span>odir<span class="token punctuation">:</span><span class="token builtin">str</span><span class="token punctuation">,</span>coord_data<span class="token punctuation">:</span>pd<span class="token punctuation">.</span>DataFrame<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">'''
-    ifile: 输入影像文件路径
-    odir: 像元值提取结果输出路径
-    coord_data: 储存坐标的DataFrame，因此调用该函数前需将坐标文件通过pandas的read_csv方法读取为DataFrame
-    '''</span>
-    <span class="token comment"># 创建Java数组变量</span>
-    my_coordinates<span class="token operator">=</span>jpy<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token string">'org.esa.snap.pixex.Coordinate'</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>coord_data<span class="token punctuation">)</span><span class="token punctuation">)</span> 
-    Coord <span class="token operator">=</span> jpy<span class="token punctuation">.</span>get_type<span class="token punctuation">(</span><span class="token string">'org.esa.snap.pixex.Coordinate'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
-    <span class="token comment"># 通过snappy的ProductIO读取影像文件</span>
-    product_subset <span class="token operator">=</span> snappy<span class="token punctuation">.</span>ProductIO<span class="token punctuation">.</span>readProduct<span class="token punctuation">(</span>ifile<span class="token punctuation">)</span>
-    <span class="token comment"># 以ndarray形式读取坐标</span>
-    name <span class="token operator">=</span> coord_data<span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'No'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    lat <span class="token operator">=</span> coord_data<span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'Latitude'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    lon <span class="token operator">=</span> coord_data<span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'Longitude'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token comment"># 坐标写入Java数组</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>coord_data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        my_coordinates<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> Coord<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>name<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>lat<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> lon<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">)</span>
-    <span class="token comment"># 调用snappy创建哈希表以储存参数，然后照着xml文件写入参数</span>
-    parameters <span class="token operator">=</span> snappy<span class="token punctuation">.</span>HashMap<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'exportBands'</span><span class="token punctuation">,</span> <span class="token boolean">True</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'exportTiePoints'</span><span class="token punctuation">,</span> <span class="token boolean">True</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'windowSize'</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'outputDir'</span><span class="token punctuation">,</span> odir<span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'outputFilePrefix'</span><span class="token punctuation">,</span> <span class="token string">"test"</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'coordinates'</span><span class="token punctuation">,</span> my_coordinates<span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'aggregatorStrategyType'</span><span class="token punctuation">,</span> <span class="token string">"mean"</span><span class="token punctuation">)</span>
-    snappy<span class="token punctuation">.</span>GPF<span class="token punctuation">.</span>createProduct<span class="token punctuation">(</span><span class="token string">'PixEx'</span><span class="token punctuation">,</span> parameters<span class="token punctuation">,</span> product_subset<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>最后根据自己的需要，用python里面的os和re库对影像文件和坐标文件进行遍历，即可实现批量提取像元值（文件存储路径因人而异，批处理这里就不展示了）。</p>
-<p>附完整代码：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> re
-<span class="token keyword">import</span> os
-<span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
-<span class="token keyword">import</span> snappy
-<span class="token keyword">import</span> jpy
-
-<span class="token keyword">def</span> <span class="token function">extract_pixel</span><span class="token punctuation">(</span>ifile<span class="token punctuation">:</span><span class="token builtin">str</span><span class="token punctuation">,</span>odir<span class="token punctuation">:</span><span class="token builtin">str</span><span class="token punctuation">,</span>coord_data<span class="token punctuation">:</span>pd<span class="token punctuation">.</span>DataFrame<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    my_coordinates<span class="token operator">=</span>jpy<span class="token punctuation">.</span>array<span class="token punctuation">(</span><span class="token string">'org.esa.snap.pixex.Coordinate'</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>coord_data<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    Coord <span class="token operator">=</span> jpy<span class="token punctuation">.</span>get_type<span class="token punctuation">(</span><span class="token string">'org.esa.snap.pixex.Coordinate'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
-
-    product_subset <span class="token operator">=</span> snappy<span class="token punctuation">.</span>ProductIO<span class="token punctuation">.</span>readProduct<span class="token punctuation">(</span>ifile<span class="token punctuation">)</span>
-    name <span class="token operator">=</span> coord_data<span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'No'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    lat <span class="token operator">=</span> coord_data<span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'Latitude'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    lon <span class="token operator">=</span> coord_data<span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">'Longitude'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">.</span>flatten<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>coord_data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        my_coordinates<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> Coord<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>name<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>lat<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> lon<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">)</span>
-
-    parameters <span class="token operator">=</span> snappy<span class="token punctuation">.</span>HashMap<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'exportBands'</span><span class="token punctuation">,</span> <span class="token boolean">True</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'exportTiePoints'</span><span class="token punctuation">,</span> <span class="token boolean">True</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'windowSize'</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'outputDir'</span><span class="token punctuation">,</span> odir<span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'outputFilePrefix'</span><span class="token punctuation">,</span> <span class="token string">"test"</span><span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'coordinates'</span><span class="token punctuation">,</span> my_coordinates<span class="token punctuation">)</span>
-    parameters<span class="token punctuation">.</span>put<span class="token punctuation">(</span><span class="token string">'aggregatorStrategyType'</span><span class="token punctuation">,</span> <span class="token string">"mean"</span><span class="token punctuation">)</span>
-    snappy<span class="token punctuation">.</span>GPF<span class="token punctuation">.</span>createProduct<span class="token punctuation">(</span><span class="token string">'PixEx'</span><span class="token punctuation">,</span> parameters<span class="token punctuation">,</span> product_subset<span class="token punctuation">)</span>
-
-<span class="token keyword">if</span> __name__<span class="token operator">==</span><span class="token string">"__main__"</span><span class="token punctuation">:</span>
-    ifile <span class="token operator">=</span> <span class="token string">r"L8_OLI_2018_03_09_02_45_33_merged_L2W.nc"</span>
-    odir <span class="token operator">=</span> <span class="token string">"./"</span>
-    coord_data_path <span class="token operator">=</span> <span class="token string">r"LC08_L1TP_121_20180309_20180320_01_T1.csv"</span>
-    coord_data <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span>coord_data_path<span class="token punctuation">)</span>
-    extract_pixel<span class="token punctuation">(</span>ifile<span class="token punctuation">,</span>odir<span class="token punctuation">,</span>coord_data<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://forum.step.esa.int/t/extracting-pixel-values-sentinel-2a-l2a-with-snap-or-snappy/29878/3">Extracting pixel values Sentinel-2a L2A with Snap or Snappy</a></p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>本来这个博客是跟风搭的，打算记录一下自己写的一些有趣的代码和一些码代码的经验。 但是翻了一下自己写的代码屎山，有趣的代码就没几个能发出来的<del>（发了怕是要被请去喝茶）</del>，那还是先放搬砖用的代码算了。</p>
-
+          <img src="/2022/03/23/SNAP_Pixel_Extraction/cover.png" class="" title="This is an image">
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/03/23/SNAP_Pixel_Extraction/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
